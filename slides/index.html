@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Семантический поиск в БД с помощью LLM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="./assets/style/style.css"/>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <script src="./assets/scripts/tailwind.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              pink: '#7D0079',
+              purple: '#600479',
+              blue: '#3D0B7A',
+            }
+          }
+        }
+      }
+    </script>
+    <style type="text/tailwindcss">
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .title-slide {
+          @apply bg-gradient-to-bl from-pink via-purple to-blue text-white align-middle text-center;
+        }
+        ul {
+          @apply list-disc;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Build Slide -->
+    <script src="./assets/scripts/remark.min.js"></script>
+    <script>
+      var slideshow = remark.create({
+        sourceUrl: 'slide-deck.md',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        ratio: '4:3',
+        // highlightStyle: 'zenburn',
+        highlightStyle: 'arta',
+        // highlightStyle: 'rainbow',
+        highlightLines: true,
+      });
+    </script>
+    <!-- Build Slide -->
+  </body>
+</html>
