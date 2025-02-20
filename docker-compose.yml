@@ -1,0 +1,59 @@
+name: semantic_search
+
+networks:
+  default:
+    name: semantic_search_network
+
+volumes:
+  php_socket:
+  postgres_data:
+
+services:
+  postgres:
+    image: ankane/pgvector
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: project
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      default:
+
+  php:
+    user: www-data
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+      target: dev
+    volumes:
+      - .:/app
+      - ~/.ssh:/var/www/.ssh:ro
+      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    environment:
+      PHP_IDE_CONFIG: "serverName=SEMANTIC_SEARCH"
+      XDEBUG_SESSION: "SEMANTIC_SEARCH"
+    depends_on:
+      - postgres
+    networks:
+      default:
+
+  nginx:
+    image: openresty/openresty:alpine
+    working_dir: /app
+    depends_on:
+      - php
+    restart: unless-stopped
+    volumes:
+      - ./public:/app/public/
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+      - "8443:443"
+    hostname: semantic_search.test
+    networks:
+      default:
